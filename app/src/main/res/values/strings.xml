@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">BarcelonaTeam</string>
+    <string name="None">None</string>
+    <string name="Name">Name :</string>
+    <string name="DOB">Date of Birth :</string>
+    <string name="Goals">Goals :</string>
+    <string name="Assists">Assists :</string>
+    <string name="Saves">Saves :</string>
+    <string name="NationalTeam">National Team : </string>
+    <string name="Exit">Exit</string>
+    <string name="Notification">Notification</string>
+    <string name="NextGames">Next Games</string>
+    <string name="Change_player">Change player :</string>
+</resources>

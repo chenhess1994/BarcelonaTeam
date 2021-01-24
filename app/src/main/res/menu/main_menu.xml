@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/newGames"
+        android:title="@string/NextGames" />
+    <item
+        android:id="@+id/clean"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:title="clean"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/notificationSwitch"
+        android:title="@string/Notification"
+        app:actionLayout="@layout/switch_item" ></item>
+    <item
+        android:id="@+id/exit"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:title="@string/Exit"
+        app:showAsAction="never" />
+</menu>
