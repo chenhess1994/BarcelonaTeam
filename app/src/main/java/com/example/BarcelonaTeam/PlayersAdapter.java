@@ -25,7 +25,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHo
     private ArrayList<Player> player2display;
 
     private PlayersAdapter adapterInstance; //We need access to the adapter that implements the subDialog
-
+    //check the branch
     public PlayersAdapter(Context context, dataTransfer listener) {
 
         this.listener =listener;
