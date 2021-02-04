@@ -34,19 +34,15 @@ public class SubstitueDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 listener.changePlayer(player,adapterPos);
-            }
+           }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 dialog.cancel();
             }
 
         });
         return builder.create();
     }
-
-
-
 }

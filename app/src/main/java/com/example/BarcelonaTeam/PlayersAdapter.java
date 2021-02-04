@@ -14,35 +14,42 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHolder> implements SubstitueDialog.DialogAdapterInterface {
 
     private ArrayList<Player> playersList;
     private Context context;
     private dataTransfer listener;
-    private ArrayList<String> lineUp;
+    private Map<String,String> lineUp;
     private static String file_path;
     private ArrayList<Player> player2display;
 
     private PlayersAdapter adapterInstance; //We need access to the adapter that implements the subDialog
-    //check the branch
+
     public PlayersAdapter(Context context, dataTransfer listener) {
 
         this.listener =listener;
         this.context=context;
         adapterInstance =this;
+
         //take the data from the dada set.
         playersList=PlayersXMLParser.parsePlayers(context);
-
         //The line up which is saved to the file and excluded from the list of changes
-        lineUp = new ArrayList<String>(Arrays.asList(Utilities.readFile().split("\n")));
-        //List of player to display on the list
+        lineUp = Utilities.readPlayers();
         player2display=new ArrayList<>();
-        for(Player p:playersList)                                                                   //Go over all the players
-            if(!lineUp.contains(Utilities.getFullName(p)))                                          //Check if a player is not in the lineup and add it to the list of player to display
+        if(lineUp!=null) {
+            for (Player p : playersList)
+                //all the players without the line up players.
+                if (!lineUp.containsValue(Utilities.getFullName(p)))
+                    player2display.add(p);
+        }
+        else{
+            for (Player p : playersList)
                 player2display.add(p);
+        }
     }
-
 
 
     //inner class
@@ -75,11 +82,11 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHo
                     temp.show(manager,"Substitute");
                 }
             });
-                //set the details in the player_item in the list
-                itemFirstName.setText(player.getFirstName());
-                itemLastName.setText(player.getLastName());
-                Context context = itemPlayerImage.getContext();
-                itemPlayerImage.setImageResource(Utilities.getImageIdByPlayer(player));
+            //set the details in the player_item in the list
+            itemFirstName.setText(player.getFirstName());
+            itemLastName.setText(player.getLastName());
+            Context context = itemPlayerImage.getContext();
+            itemPlayerImage.setImageResource(Utilities.getImageIdByPlayer(player));
         }
     }
 
@@ -119,19 +126,16 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHo
 
     @Override
     public void changePlayer(Player player, int adapterPos){
-        //Write to file the player in the line up.
-        Utilities.writeData(Utilities.getFullName(player));
         //Get the player data of the player pressed
         Player p = player2display.get(adapterPos);
         //Set the image in the player data
         p.setImgPlayer(Utilities.getImageIdByPlayer(player));
         //Call the function to display the data in the pitch
         listener.displayDetailPlayer(p);
+        //add the position of the player in the pitch to the write and add func that extract the id and the name to a map.
+        //Write to file the player in the line up and his position
+        Utilities.writeData("log_eleven.txt",p.getPosition()+"-"+Utilities.getFullName(p));
         //Call popBackStack in order to return to the pitch and view the changes
         ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
     }
-
-
-
-
 }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BarcelonaTeam</string>
     <string name="None">None</string>
-    <string name="Name">Name :</string>
+    <string name="Name">Full name :</string>
     <string name="DOB">Date of Birth :</string>
     <string name="Goals">Goals :</string>
     <string name="Assists">Assists :</string>
@@ -9,6 +9,10 @@
     <string name="NationalTeam">National Team : </string>
     <string name="Exit">Exit</string>
     <string name="Notification">Notification</string>
-    <string name="NextGames">Next Games</string>
+    <string name="NextGames">Matches</string>
     <string name="Change_player">Change player :</string>
+    <string name="Comment">Comment:</string>
+    <string name="clear">clear:</string>
+    <string name="Away">Away</string>
+    <string name="Home">Home</string>
 </resources>
