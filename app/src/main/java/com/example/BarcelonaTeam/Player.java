@@ -1,23 +1,23 @@
 package com.example.BarcelonaTeam;
 
+
 public class Player {
-   private String firstName;
-   private String lastName;
-   private String nationalTeam;
-   private String birth;
-   private String goals;
-   private String assists;
-   private String saves;
-   private boolean lineup;
-   private int imgPlayer;
+    private String firstName;
+    private String lastName;
+    private String nationalTeam;
+    private String birth;
+    private String goals;
+    private String assists;
+    private String saves;
+    private String position;
+    private int imgPlayer;
 
-
-    public boolean getLineup() {
-        return lineup;
+    public String getPosition() {
+        return position;
     }
 
-    public void setLineup(boolean lineup) {
-        this.lineup = lineup;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public int getImgPlayer() {

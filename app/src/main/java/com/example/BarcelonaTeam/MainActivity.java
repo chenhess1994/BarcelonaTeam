@@ -1,31 +1,28 @@
 package com.example.BarcelonaTeam;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnLongClickListener, PlayersAdapter.dataTransfer {
     private ImageButton GK,RB,RCB,LCB,LB,LCM,RCM,ACM,LW,RW,ST;
     private TextView GKname,RBname,RCBname,LCBname,LBname,LCMname,RCMname,ACMname,LWname,RWname,STname;
     private ArrayList<ImageButton> imageArray;
     private ArrayList<TextView>    textArray;
-    //private ArrayList<String> pressedPlayer;
+    private HashMap<String,String> playersFromFile =new HashMap<>();
     private int playerClicked;
 
 
@@ -34,13 +31,13 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Utilities.setContext(getBaseContext());
         controlAllViews();
-
+        Utilities.readMatches();
 
         imageArray=new ArrayList<ImageButton>(11);
         textArray=new ArrayList<TextView>(11);
-
 
         imageArray.add(GK);
         imageArray.add(RB);
@@ -66,19 +63,40 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         textArray.add(RWname);
         textArray.add(STname);
 
+        //if the file is not empty so put the details in the pitch
+        if(!Utilities.readFile("log_eleven.txt").equals(""))
+        {
+            playersFromFile =Utilities.readPlayers();
+            for(int i=0;i<imageArray.size();i++)
+            {
+                for(Map.Entry<String, String> player: playersFromFile.entrySet())
+                {
+                    //we check if the position in the image is equal to position in the readFile
+                    if(getResources().getResourceEntryName(imageArray.get(i).getId()).equals(player.getKey()))
+                    {
+                        Player p=Utilities.getPlayer(player.getValue());
+                        textArray.get(i).setText(Utilities.getFullName(p));
+                        imageArray.get(i).setImageResource(Utilities.getImageIdByPlayer(p));
+                        imageArray.get(i).setTag(Utilities.getFullName(p));
+                        p.setPosition(getResources().getResourceEntryName(imageArray.get(i).getId()));
+                    }
+                }
+            }
+        }
+
         /*cookbook-Listener 2*/
-        View.OnClickListener myListener=new View.OnClickListener() {
+        View.OnClickListener imageListener=new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //Get player from list according to what player was pressed on the pitch
-                Player temp=null;
+                //Get player from list according to what player was pressed on the pitch
+                Player displayPlayer=null;
                 if(!view.getTag().toString().equals("null")){                                       //Check if there was a player pressed or just "?"
                     for(int i=0;i<Utilities.allPlayers.size();i++)                                  //Go over all the players
                         if(Utilities.getFullName(Utilities.allPlayers.get(i)).equals(view.getTag()))//Check which player has the same full name of the player you pressed on
-                            temp=Utilities.allPlayers.get(i);                                       //Assign the player in order to send it to the fragment
+                            displayPlayer=Utilities.allPlayers.get(i);                              //Assign the player in order to send it to the fragment
                 }
                 //Creation and switching of the details fragment
-                PlayerDetailsFrag newFrag= new PlayerDetailsFrag(temp);
+                PlayerDetailsFrag newFrag= new PlayerDetailsFrag(displayPlayer);
                 getSupportFragmentManager().beginTransaction().
                         add(R.id.pitch_main, newFrag).//add on top of the static fragment
                         addToBackStack(null).//cause the back button scrolling through the loaded fragments
@@ -87,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
             }
         };
 
-        setAllClickListeners(myListener);
+        setAllClickListeners(imageListener);
     }
 
     @Override
@@ -98,18 +116,33 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.exit:
                 FragmentManager exitFragmentDialog=getSupportFragmentManager(); // the fragment for the exit dialog
                 new ExitDialog().show(exitFragmentDialog,"Exit");
                 break;
             case R.id.clean:
-                Utilities.cleanFile();
+                Utilities.cleanFile("log_eleven.txt");
                 break;
-            case R.id.notificationSwitch:
+            case R.id.notification:
+                if(item.isChecked()) {
+                    item.setChecked(false);
+                    Toast.makeText(this,"Notification has been disabled",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    item.setChecked(true);
+                    Toast.makeText(this,"Notification has been enabled",Toast.LENGTH_LONG).show();
+                }
+                //notificationItem=item;
                 break;
             case R.id.newGames:
+                NextGamesFrag newFrag= new NextGamesFrag();
+                getSupportFragmentManager().beginTransaction().
+                        add(R.id.pitch_main, newFrag).//add on top of the static fragment
+                        addToBackStack(null).//cause the back button scrolling through the loaded fragments
+                        commit();
+                getSupportFragmentManager().executePendingTransactions();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -167,9 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     public boolean onLongClick(View view) {
 
         for(int i=0;i<imageArray.size();i++)
-            //if(imageArray.get(i).getId()==view.getId()) {
             if(imageArray.get(i)==view){
-                //pressedPlayer.set(i, "On");
                 playerClicked=i;
             }
 
@@ -182,7 +213,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         return true;
     }
 
-
+    /**
+     * implement interface of PlayersAdapter.dataTransfer to pass details of the player from here.
+     * @param p the specific player
+     */
     @Override
     public void displayDetailPlayer(Player p) {
         for(int i=0;i<imageArray.size();i++) {
@@ -193,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 
                 //Set tag for which player is in the location by full name
                 imageArray.get(i).setTag(Utilities.getFullName(p));
+                p.setPosition(getResources().getResourceEntryName(imageArray.get(i).getId()));
 
                 //Change the image and text to match the player added
                 imageArray.get(i).setImageResource(p.getImgPlayer());
@@ -201,6 +236,17 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
             }
         }
     }
-
-
 }
+
+/*
+* //AAA separated between games
+        String games="FC BARCELONA\n"  +  "REAL MADRID\n"   +  "2021-02-03\n" + "22:00:00\n" + "AAA" +
+                     "GRANADA CF\n"    +  "FC BARCELONA\n"  +  "2021-02-04\n" + "17:00:00\n" + "AAA" +
+                     "FC BARCELONA\n"  +  "REAL BETIS\n"    +  "2021-02-05\n" + "15:00:00\n" + "AAA" +
+                     "FC BARCELONA\n"  +  "Cádiz\n"         +  "2021-02-06\n" + "20:00:00\n" + "AAA" +
+                     "Elche\n"         +  "FC BARCELONA\n"  +  "2021-03-13\n" + "20:00:00\n" + "AAA" +
+                     "FC BARCELONA\n"  +  "ALAVES\n"        +  "2021-03-20\n" + "20:00:00\n" + "AAA" +
+                     "Sevilla\n\n"     +  "FC BARCELONA\n"  +  "2021-03-25\n" + "22:00:00\n" + "AAA" +
+                     "FC BARCELONA\n"  +  "ALAVES\n"        +  "2021-04-02\n" + "22:00:00\n" + "AAA" +
+                     "Osasuna\n"       +  "FC BARCELONA\n"  +  "2021-05-21\n" + "22:00:00\n" + "AAA" +
+                     "FC BARCELONA\n"  +  "Real Sociedad\n" +  "2021-06-20\n" + "22:00:00\n";*/
