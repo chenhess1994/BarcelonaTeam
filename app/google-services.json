@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "860333525413",
+    "firebase_url": "https://barcelona-team-default-rtdb.firebaseio.com",
+    "project_id": "barcelona-team",
+    "storage_bucket": "barcelona-team.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860333525413:android:4243948f90e47a9194404c",
+        "android_client_info": {
+          "package_name": "com.example.BarcelonaTeam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860333525413-spc2f37nd835vptpfit07cnoaasqlfnc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1vtKye_lyTgzVZAOEVn27eW6f_ZXd6qk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860333525413-spc2f37nd835vptpfit07cnoaasqlfnc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860333525413:android:9d0096ad3917984d94404c",
+        "android_client_info": {
+          "package_name": "com.example.barcelonateam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860333525413-spc2f37nd835vptpfit07cnoaasqlfnc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1vtKye_lyTgzVZAOEVn27eW6f_ZXd6qk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860333525413-spc2f37nd835vptpfit07cnoaasqlfnc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

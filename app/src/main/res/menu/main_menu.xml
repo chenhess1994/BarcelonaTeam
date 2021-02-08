@@ -4,20 +4,37 @@
 
     <item
         android:id="@+id/newGames"
-        android:title="@string/NextGames" />
+        android:icon="@android:drawable/ic_menu_day"
+        android:title="@string/NextGames"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/clean"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/clear"
+        android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/notification"
         android:checkable="true"
-        android:title="@string/Notification" />
+        android:title="@string/Notification"
+        app:showAsAction="never" />
     <item
         android:id="@+id/exit"
         android:icon="@android:drawable/ic_lock_power_off"
-        android:title="@string/Exit"/>
+        android:title="@string/Exit"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/removePlayer"
+        android:icon="@android:drawable/ic_delete"
+        android:title="Remove Player"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/addplayer"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Add Player"
+        android:visible="true"
+        app:showAsAction="always" />
 </menu>

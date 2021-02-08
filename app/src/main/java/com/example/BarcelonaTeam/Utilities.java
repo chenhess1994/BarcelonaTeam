@@ -11,13 +11,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.security.acl.LastOwnerException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-public class Utilities {
+/**
+ * static class that holds the all players and all matches
+ */
+public class  Utilities {
+
     private static String file_path;
     private static Context context_this;
     public static ArrayList<Player> allPlayers;
@@ -31,33 +37,59 @@ public class Utilities {
     public static int getImageIdByPlayer(Player player){
         String nameIdentifier = (player.getFirstName() + "_" + player.getLastName()).toLowerCase();//this is the shape of name in drawable.
         int id = context_this.getResources().getIdentifier(nameIdentifier, "drawable", context_this.getPackageName());
+        if(id==0)
+            return R.drawable.player_defulat;
         return id;
     }
 
     /**
-     * return the current context
+     * return the current context and
      * @param context
      */
-    public static void setContext(Context context){
-        context_this=context;
-        file_path=context.getFilesDir().getAbsolutePath();
-        allPlayers=PlayersXMLParser.parsePlayers(context);
-        /*The String that we load to the inside file of the system*/
-        //AAA separated between games
-        String games="REAL MADRID\n"   +  "FC BARCELONA\n"   +  "2021-02-03\n" + "22:00:00\n" + "AAA" +
-                     "FC BARCELONA\n"  +  "GRANADA CF\n"     +  "2021-02-04\n" + "17:00:00\n" + "AAA" +
-                     "REAL BETIS\n"    +  "FC BARCELONA\n"   +  "2021-02-05\n" + "15:00:00\n" + "AAA" +
-                     "FC BARCELONA\n"  +  "Cádiz\n"          +  "2021-02-21\n" + "20:00:00\n" + "AAA" +
-                     "Alavés\n"        +  "FC BARCELONA\n"   +  "2021-03-02\n" + "19:00:00\n" + "AAA" +
-                     "FC BARCELONA\n"  +  "Elche\n"          +  "2021-03-05\n" + "20:00:00\n" + "AAA" +
-                     "Sevilla\n"       +  "FC BARCELONA\n"   +  "2021-03-09\n" + "15:00:00\n" + "AAA" +
-                     "FC BARCELONA\n"  +  "Osasuna\n"        +  "2021-03-20\n" + "20:00:00\n" + "AAA" +
-                     "Real Sociedad\n" +  "FC BARCELONA\n"   +  "2021-04-02\n" + "20:00:00\n" + "AAA" +
-                     "FC BARCELONA\n"  +  "Villarreal\n"     +  "2021-04-12\n" + "19:00:00\n" + "AAA" +
-                     "Getafe\n"        +  "FC BARCELONA\n"   +  "2021-04-21\n" + "20:00:00";
+    public static void InitializingData(Context context) {
+        context_this = context;
+        file_path = context.getFilesDir().getAbsolutePath();
 
-        cleanFile("log_matches.txt");
-        writeData("log_matches.txt",games);
+        //The initializing data of the players.
+        String stringOfInitializePlayers = playersStringData();
+
+        //if the file is empty write the initializing data (so we are in the starting app)
+        String isEmptyStringTest=readFile("log_allPlayers.txt");
+        if(isEmptyStringTest.equals(""))
+            writeData("log_allPlayers.txt", stringOfInitializePlayers);
+
+        allPlayers =  parsePlayers();
+        matches    =  MatchesXMLParser.parseMatches(context);
+    }
+
+    /**
+     * read players from file
+     * @return players from the file "log_allPlayers.txt".
+     */
+    public static ArrayList<Player> parsePlayers()
+    {
+        ArrayList<Player> players=new ArrayList<>();
+        String preEditPlayers=Utilities.readFile("log_allPlayers.txt");
+        if(preEditPlayers.equals(""))
+            return players;
+        ArrayList<String> allPlayersSplit = new ArrayList<>(Arrays.asList(preEditPlayers.split("AAA")));
+        for(String player:allPlayersSplit){
+            ArrayList<String> currentPlayer=new ArrayList<>(Arrays.asList(player.split("\n")));
+            if(currentPlayer.size()!=0) {
+                Player p = new Player();
+                p.setFirstName(currentPlayer.get(0));
+                p.setLastName(currentPlayer.get(1));
+                p.setBirth(currentPlayer.get(2));
+                p.setNationalTeam(currentPlayer.get(3));
+                p.setGoals(currentPlayer.get(4));
+                p.setAssists(currentPlayer.get(5));
+                p.setSaves(currentPlayer.get(6));
+                p.setImgPlayer(Utilities.getImageIdByPlayer(p));
+
+                players.add(p);
+            }
+        }
+        return players;
     }
 
     /**
@@ -82,6 +114,7 @@ public class Utilities {
                 text.append(line);
                 text.append('\n');
             }
+
             inputStream.close();
             br.close();
         } catch (IOException e) {
@@ -93,8 +126,9 @@ public class Utilities {
     }
 
     /**
-     * write the data to the lof file in this way position-full name example: GK-mark ter stegen
-     * @param data the data is insert (position-name)
+     * write the data to the log file
+     * @param data the data is insert to the file
+     * @param FILE_NAME the name of the file.
      */
     public static void writeData(String FILE_NAME,String data) {
         File directory = new File(file_path);
@@ -108,7 +142,9 @@ public class Utilities {
 
             FileOutputStream fOut = new FileOutputStream(newFile,true);
             OutputStreamWriter outputWriter=new OutputStreamWriter(fOut);
-            outputWriter.write(data+"\n");
+            outputWriter.write(data);
+            if(FILE_NAME.equals("log_eleven.txt"))
+                outputWriter.write("\n");
             outputWriter.close();
 
         }catch (Exception e){
@@ -121,9 +157,6 @@ public class Utilities {
      */
     public static void cleanFile(String FILE_NAME){
 
-        //sheared Preference delete file
-        //context_this.getSharedPreferences("logSP",Context.MODE_PRIVATE).edit().clear().commit();
-
         try {
             FileOutputStream writer = new FileOutputStream(file_path+File.separator+FILE_NAME);
             writer.write(("").getBytes());
@@ -134,7 +167,7 @@ public class Utilities {
     }
 
     /**
-     * remove player from log
+     * remove player from log file
      * @param fullNamePlayer
      */
     public static void removePlayerFromLogLineUp(String fullNamePlayer){
@@ -144,6 +177,40 @@ public class Utilities {
         for (String str: lineUpTemp) {
             writeData("log_eleven.txt",str);
         }
+    }
+
+    /**
+     * remove player from log file
+     * @param fullNamePlayer
+     */
+    public static void removePlayerFromAllplayers(String fullNamePlayer){
+        ArrayList<Player> players=new ArrayList<>();
+        String preEditPlayers=Utilities.readFile("log_allPlayers.txt");
+        ArrayList<String> allPlayersSplit = new ArrayList<>(Arrays.asList(preEditPlayers.split("AAA")));
+
+        for(int i=0;i<allPlayersSplit.size();i++) {
+            ArrayList<String> currentPlayer = new ArrayList<>(Arrays.asList(allPlayersSplit.get(i).split("\n")));
+            if((currentPlayer.get(0)+" "+currentPlayer.get(1)).equals(fullNamePlayer)) {
+                allPlayersSplit.remove(i);
+                break;
+            }
+        }
+
+//        for(int i=0;i<allPlayersSplit.size();i++) {
+//            ArrayList<String> currentPlayer = new ArrayList<>(Arrays.asList(allPlayersSplit.get(i).split("\n")));
+//            players.add(getPlayer((currentPlayer.get(0) + " " + currentPlayer.get(1))));
+//        }
+
+        cleanFile("log_allPlayers.txt");
+        for (int i=0;i<allPlayersSplit.size()-1;i++) {
+            writeData("log_allPlayers.txt", allPlayersSplit.get(i));
+            writeData("log_allPlayers.txt", "AAA");
+        }
+
+        //if(allPlayersSplit.size()>0)
+            writeData("log_allPlayers.txt", allPlayersSplit.get(allPlayersSplit.size()-1));
+
+       // return  players;
     }
 
     /**
@@ -174,7 +241,7 @@ public class Utilities {
      * and the value is the player
      * @return map <position,player>
      */
-    public static HashMap readPlayers(){
+    public static HashMap readPlayersForLineUp(){
         int end;
         HashMap<String,String> playersList=new HashMap<>();
        ArrayList<String> list=new ArrayList<>(Arrays.asList(Utilities.readFile("log_eleven.txt").split("\n")));
@@ -194,20 +261,57 @@ public class Utilities {
        return playersList;
     }
 
-    public static void readMatches()
-    {
-        matches=new ArrayList<>();
-        String preEditMatches=Utilities.readFile("log_matches.txt");
-        ArrayList<String> allMatchesSplit = new ArrayList<>(Arrays.asList(preEditMatches.split("AAA")));
-        for(String match:allMatchesSplit){
-            ArrayList<String> currentGame=new ArrayList<>(Arrays.asList(match.split("\n")));
-            Game g=new Game();
-            g.setHome(currentGame.get(0));
-            g.setAway(currentGame.get(1));
-            g.setDate(LocalDate.parse(currentGame.get(2)));
-            g.setTime(LocalTime.parse(currentGame.get(3)));
-            //g.setResult(temp.get(4));
-            matches.add(g);
+    /**
+     * find the position of specific player from the pitch
+     * @param p
+     * @return the position of the player
+     */
+    public static String findPositionInPitch(Player p){
+        String pos = null;
+        //find the position of the player in the pitch.
+        HashMap<String,String> lineUp=Utilities.readPlayersForLineUp();
+        for(Map.Entry<String, String> player: lineUp.entrySet()){
+            if(player.getValue().equals(Utilities.getFullName(p)))
+            {
+                pos=player.getKey();
+            }
         }
+        return pos;
+    }
+
+    /**
+     * @return the string of the players
+     */
+    public static  String playersStringData(){
+        //AAA separated between players, and \n separated between the items in the games.
+        String data=
+                    "Anssumane\n" +  "Fati\n"        +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Arturo\n"    +  "Vidal\n"       +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Clement\n"   +  "Lenglet\n"     +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Frenkie\n"   +  "De_jong\n"     +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Francisco\n" +  "Trincao\n"     +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Lional\n"    +  "Messi\n"       +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Gerard\n"    +  "Pique\n"       +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Jordy\n"     +  "Alba\n"        +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Jean\n"      +  "Todibo\n"      +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Junior\n"    +  "Firpo\n"       +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Luis\n"      +  "Suarez\n"      +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Marc\n"      +  "TerStegen\n"   +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Antoine\n"   +  "Griezmann\n"   +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Martin\n"    +  "Braithwaite\n" +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Miralem\n"   +  "Pianic\n"      +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Nelson\n"    +  "Semedo\n"      +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Noberto\n"   +  "Neto\n"        +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Ousmane\n"   +  "Dembele\n"     +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Philippe\n"  +  "Coutinho\n"    +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Rafael\n"    +  "Alcantara\n"   +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Riqui\n"     +  "Puig\n"        +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Samuel\n"    +  "Umtiti\n"      +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Sergi\n"     +  "Roberto\n"     +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Sergio\n"    +  "Busquets\n"    +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320\n" + "AAA" +
+                    "Sergirio\n"  +  "Dest\n"        +  "20-09-1984\n" + "Argentina\n" +"500\n" +"400\n" + "320";
+
+        return  data;
+
     }
 }

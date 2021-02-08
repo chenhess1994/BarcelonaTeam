@@ -11,12 +11,12 @@
 
     <ImageButton
         android:id="@+id/ST"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="168dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,12 +35,12 @@
 
     <ImageButton
         android:id="@+id/RW"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,12 +59,12 @@
 
     <ImageButton
         android:id="@+id/LW"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,12 +84,12 @@
 
     <ImageButton
         android:id="@+id/LCM"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="88dp"
         android:layout_marginBottom="295dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -109,12 +109,12 @@
 
     <ImageButton
         android:id="@+id/RCM"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="88dp"
         android:layout_marginBottom="295dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -134,11 +134,11 @@
 
     <ImageButton
         android:id="@+id/ACM"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginBottom="350dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -159,12 +159,12 @@
 
     <ImageButton
         android:id="@+id/LB"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="15dp"
         android:layout_marginBottom="170dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -187,7 +187,7 @@
         android:layout_height="75dp"
         android:layout_marginStart="92dp"
         android:layout_marginBottom="120dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -211,7 +211,7 @@
         android:layout_height="75dp"
         android:layout_marginEnd="92dp"
         android:layout_marginBottom="120dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -232,12 +232,12 @@
 
     <ImageButton
         android:id="@+id/RB"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="13dp"
         android:layout_marginBottom="170dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -256,11 +256,11 @@
 
     <ImageButton
         android:id="@+id/GK"
-        android:tag="null"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginBottom="35dp"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/player_defulat"
+        android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

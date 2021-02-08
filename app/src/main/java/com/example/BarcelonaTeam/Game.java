@@ -5,6 +5,7 @@ import android.util.TimeUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Game {
@@ -20,6 +21,14 @@ public class Game {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public void setStrDate(String date) {
+        this.date = LocalDate.parse(date);
+    }
+
+    public void setStrTime(String time) {
+        this.time = LocalTime.parse(time);
     }
 
     public LocalTime getTime() {

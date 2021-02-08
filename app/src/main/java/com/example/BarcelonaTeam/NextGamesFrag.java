@@ -2,6 +2,7 @@ package com.example.BarcelonaTeam;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class NextGamesFrag extends Fragment {
 
@@ -62,9 +65,14 @@ public class NextGamesFrag extends Fragment {
     }
 
     private void putMatch(int position,Game match,TextView home,TextView away,TextView date,TextView time){
+        //set the details to the layout.
         if(position<Utilities.matches.size()) {
             match=Utilities.matches.get(position);
-            date.setText(match.getDate().toString());
+            // change the format of the date to dd/mm/yy from yyyy-mm-dd
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String dateFormat = match.getDate().format(pattern);
+            date.setText(dateFormat);
+
             time.setText(match.getTime().toString());
             home.setText(match.getHome());
             away.setText(match.getAway());
