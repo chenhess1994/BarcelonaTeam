@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/barca"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
         <activity android:name="com.example.BarcelonaTeam.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,5 +18,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

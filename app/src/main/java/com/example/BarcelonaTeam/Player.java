@@ -12,6 +12,10 @@ public class Player {
     private String position;
     private int imgPlayer;
 
+    public Player(){
+      this.imgPlayer=R.drawable.player_defulat;
+    }
+
     public String getPosition() {
         return position;
     }
