@@ -1,4 +1,4 @@
-package com.example.BarcelonaTeam;
+package com.example.barcelonaTeam;
 
 import org.junit.Test;
 

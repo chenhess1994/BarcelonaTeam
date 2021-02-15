@@ -19,6 +19,7 @@
     <string name="Away">Away</string>
     <string name="Home">Home</string>
     <string name="add_player">Add player</string>
-    <string name="delete_player">delete player</string>
+    <string name="delete_player">Delete player</string>
     <string name="Agree">Agree</string>
+    <string name="remove_player">Remove Player</string>
 </resources>

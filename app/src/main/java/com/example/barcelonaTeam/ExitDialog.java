@@ -1,4 +1,4 @@
-package com.example.BarcelonaTeam;
+package com.example.barcelonaTeam;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,23 +9,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-public class SubstitueDialog extends DialogFragment {
-    private Player player;
-    private int adapterPos;
-    private DialogAdapterInterface listener;
-    public SubstitueDialog(Player player, int adapterPosition, PlayersAdapter instance) {
-        this.player =player;
-        adapterPos=adapterPosition;
-        listener=instance;
-    }
+/**
+ * Dialog as required in guidelines
+ */
+public class ExitDialog extends DialogFragment {
 
-    public interface DialogAdapterInterface {
-        void changePlayer(Player player, int adapterPos);
-    }
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        String title = "Changing Player";
+        String title = "Closing the application";
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title);
@@ -33,8 +25,9 @@ public class SubstitueDialog extends DialogFragment {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                listener.changePlayer(player,adapterPos);
-           }
+                getActivity().finish();
+                System.exit(0);
+            }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override
@@ -45,4 +38,6 @@ public class SubstitueDialog extends DialogFragment {
         });
         return builder.create();
     }
+
+
 }

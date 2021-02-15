@@ -1,4 +1,4 @@
-package com.example.BarcelonaTeam;
+package com.example.barcelonaTeam;
 
 import android.content.Context;
 import android.content.res.AssetManager;

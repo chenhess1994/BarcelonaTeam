@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/pitch"
     android:id="@+id/pitch_main"
+    android:clickable="true"
     tools:context=".MainActivity">
 
     <ImageButton
@@ -15,7 +16,7 @@
         android:layout_height="75dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="168dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +40,7 @@
         android:layout_height="75dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -63,7 +64,7 @@
         android:layout_height="75dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -88,7 +89,7 @@
         android:layout_height="75dp"
         android:layout_marginStart="88dp"
         android:layout_marginBottom="295dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -113,7 +114,7 @@
         android:layout_height="75dp"
         android:layout_marginEnd="88dp"
         android:layout_marginBottom="295dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -137,7 +138,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginBottom="350dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -163,7 +164,7 @@
         android:layout_height="75dp"
         android:layout_marginStart="15dp"
         android:layout_marginBottom="170dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -187,7 +188,7 @@
         android:layout_height="75dp"
         android:layout_marginStart="92dp"
         android:layout_marginBottom="120dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -211,7 +212,7 @@
         android:layout_height="75dp"
         android:layout_marginEnd="92dp"
         android:layout_marginBottom="120dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -236,7 +237,7 @@
         android:layout_height="75dp"
         android:layout_marginEnd="13dp"
         android:layout_marginBottom="170dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -259,7 +260,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginBottom="35dp"
-        android:src="@drawable/player_defulat"
+        android:src="@drawable/question_mark"
         android:tag="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
