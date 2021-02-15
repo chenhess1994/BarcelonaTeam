@@ -1,6 +1,8 @@
-package com.example.BarcelonaTeam;
+package com.example.barcelonaTeam;
 
-
+/**
+ * This class represent the entity of a single Player in our system with its data
+ */
 public class Player {
     private String firstName;
     private String lastName;
@@ -12,6 +14,9 @@ public class Player {
     private String position;
     private int imgPlayer;
 
+    /**
+     * Builder with default image
+     */
     public Player(){
       this.imgPlayer=R.drawable.player_defulat;
     }

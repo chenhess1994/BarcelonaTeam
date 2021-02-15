@@ -1,17 +1,14 @@
-package com.example.BarcelonaTeam;
-
-import android.util.TimeUtils;
+package com.example.barcelonaTeam;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
+/**
+ * This Class represents the entity of a single match with details of who is home team ,away team  date and time of match.
+ */
 public class Game {
     private String home;
     private String away;
-    private String result;
     private LocalDate date;
     private LocalTime time;
 
@@ -54,15 +51,5 @@ public class Game {
     public void setAway(String away) {
         this.away = away;
     }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-
 
 }

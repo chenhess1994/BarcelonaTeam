@@ -1,7 +1,6 @@
-package com.example.BarcelonaTeam;
+package com.example.barcelonaTeam;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHolder> implements SubstitueDialog.DialogAdapterInterface {
+/**
+ * This class if for our adatper to display the list of players
+ * RecyclerView as required in guidelines
+ */
+public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHolder> implements SubstituteDialog.DialogAdapterInterface {
 
     private ArrayList<Player> playersList;
     private Context context;
@@ -28,32 +30,43 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHo
     private int id;
     private PlayersAdapter adapterInstance; //We need access to the adapter that implements the subDialog
 
+    /**
+     * This constructor is used to initialize our variables and build the list of players we wish to display
+     * @param context
+     * @param listener
+     * @param id
+     */
     public PlayersAdapter(Context context, dataTransfer listener,int id) {
 
         this.listener =listener;
         this.context=context;
         this.adapterInstance =this;
         this.id=id;
-        //take the data from the dada set.
-        playersList=Utilities.parsePlayers();//yuda amar lahshov al ze
-        //The line up which is saved to the file and excluded from the list of changes
+        //Take the data of the player from the file that saves their data (filename="log_allPlayers")
+        playersList=Utilities.parsePlayers();
+
+        //The line up which is read from the file and excluded from the list of changes (filename="log_eleven")
         lineUp = Utilities.readPlayersForLineUp();
+
+        //A list of player that changes according to what was pressed and the lineup
         player2display=new ArrayList<>();
+
         if(player2display.size()==0) {
+            //Check if the button that was pressed was delete or change player
             if (id != R.id.removePlayer) {
-                if (lineUp != null) {
-                    for (Player p : playersList)
-                        //all the players without the line up players.
+                //In case change player
+                if (lineUp != null) {   //Check if the lineup contains data
+                    for (Player p : playersList)    //Go over all the players and exclude the player which are in the lineup
+                        //check if the lineup contains the player and add it to the list to display in case it doesn't
                         if (!lineUp.containsValue(Utilities.getFullName(p)))
                             player2display.add(p);
                 } else {
-                    for (Player p : playersList)
-                        player2display.add(p);
+                    //In case the lineup is empty display all the players
+                    player2display=playersList;
                 }
             } else {
-                //if the id his removePlayer
-                for (Player p : playersList)
-                    player2display.add(p);
+                //In case delete player we need to display all the players
+                player2display=playersList;
             }
         }
     }
@@ -71,38 +84,46 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHo
         return viewHolder;
     }
 
-    //inner class
+    //Inner Class MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView itemPlayerImage;
         private TextView itemFirstName, itemLastName;
         private View itemView;
         private ImageView removePlayers;
+
         public MyViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
+            /*  Stores the itemView in a public final member variable that can be used
+                to access the context from any ViewHolder instance
+                */
             super(itemView);
             this.itemView=itemView;
 
-            //connect the variables to there widgets in the player_detail_recycler.
+            //Control the fields in the app per item
             itemPlayerImage =(ImageView)itemView.findViewById(R.id.imagePlayer);
             itemFirstName =(TextView)itemView.findViewById(R.id.firstName);
             itemLastName =(TextView)itemView.findViewById(R.id.lastName);
             removePlayers=(ImageView)itemView.findViewById(R.id.removePlayerButton);
 
-            //if the removePlayer id is not match to the button if yes doesn't show it in layout
+            //Display the button to delete a player according to what button was pressed to display the players
             if(id!=R.id.removePlayer)
                 removePlayers.setVisibility(View.INVISIBLE);
         }
 
-        //when we click on the item in the recyclerView
+        //This functions connects between the data to display and the item in the list
         public void bindData(Player player){
+            /*
+            Set listener to every item
+             */
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
+                    /*
+                    Display dialog to change player or disable the ability to click on the item in case you want to delete
+                     */
                     if(id!=R.id.removePlayer) {
                         FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
-                        SubstitueDialog temp = new SubstitueDialog(player, getAdapterPosition(), adapterInstance);
+                        SubstituteDialog temp = new SubstituteDialog(player, getAdapterPosition(), adapterInstance);
                         temp.show(manager, "Substitute");
                     }
                     else
@@ -110,37 +131,41 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHo
                 }
             });
 
-            //set the details in the player_item in the list
+            //Display the details on screen from the Player object
             itemFirstName.setText(player.getFirstName());
             itemLastName.setText(player.getLastName());
             Context context = itemPlayerImage.getContext();
+            /*
+            If the image of the player object is set to something other than default take the correct image from the system
+            Otherwise display the default image for players
+             */
             if(player.getImgPlayer()!=R.drawable.player_defulat)
                 itemPlayerImage.setImageResource(Utilities.getImageIdByPlayer(player));
             else
                 itemPlayerImage.setImageResource(R.drawable.player_defulat);
-
+            /*
+            Set listener for the delete button
+             */
             removePlayers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //Delete the player from the system
 
-                    //delete the player from the list in the removePlayer RecyclerView and return the update list
+                    //Delete the player from the players file
                     Utilities.removePlayerFromAllplayers(Utilities.getFullName(player));
+                    //Re-read the file and change the list of player to display
                     playersList=Utilities.parsePlayers();
-                    //notify about the removed.
+                    player2display.clear();
+                    player2display=playersList;
+                    //Notify about the removed player
                     notifyItemRemoved(getAdapterPosition());
-
-                    //check if the player is in the lineUp to delete him from pitch
+                    //Check if the player was in the lineUp and delete from the pitch
                     if(lineUp!=null && lineUp.containsValue(Utilities.getFullName(player))) {
-                        //delete the player also from the pitch
+                        //Delete the player from the pitch
                         listener.removePlayerFromPitch(player);
-                        //delete the player also from the line up file
+                        //Delete the player also from the lineup file
                         Utilities.removePlayerFromLogLineUp(Utilities.getFullName(player));
                     }
-
-                    player2display.clear();
-                    for (Player p : playersList)
-                        player2display.add(p);
-
                 }
             });
         }
@@ -163,29 +188,39 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.MyViewHo
     }
 
 
-    public interface dataTransfer {
-        public void displayDetailPlayer(Player p);
-        public void removePlayerFromPitch(Player p);
-    }
 
     /**
-     * Implement of SubstituteDialog after we press there yes.
-     * @param player
-     * @param adapterPos
+     * Implement of SubstituteDialog Interface in order to change player after we press yes.
+     * @param player Player to take data from
+     * @param adapterPos Position of player in list
      */
     @Override
     public void changePlayer(Player player, int adapterPos){
         //Get the player data of the player pressed
         Player p = player2display.get(adapterPos);
         //Set the image in the player data
-        p.setImgPlayer(Utilities.getImageIdByPlayer(player));//TODO:think if it necessery
+        p=Utilities.getPlayer(Utilities.getFullName(p));
+        p.setImgPlayer(Utilities.getImageIdByPlayer(player));
         //Call the function to display the data in the pitch (found in the MainActivity.)
         listener.displayDetailPlayer(p);
-        //add the position of the player in the pitch to the write and add func that extract the id and the name to a map.
+
         //Write to file the player in the line up and his position
         Utilities.writeData("log_eleven.txt",p.getPosition()+"-"+Utilities.getFullName(p));
-        //Call popBackStack in order to return to the pitch after the change
+        //Call popBackStack in order to return to the previous screen after the change
         ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+    }
+    /**
+     *This interface is our way of communication between our adapter and the main activity which is the pitch
+     */
+    public interface dataTransfer {
+        /*
+        This function takes a player and display it on the pitch according to what was pressed in the adapter
+         */
+        public void displayDetailPlayer(Player p);
+        /*
+        This function takes a player and remove it from the pitch according to what was pressed in the adapter
+         */
+        public void removePlayerFromPitch(Player p);
     }
 }
 
